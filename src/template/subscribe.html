@@ -1,0 +1,55 @@
+<ion-view title="我的预订" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-back" on-tap="vm.goBack()"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header" overflow-scrolling="false">
+
+        <ion-refresher ng-if="vm.lists.length !== 0" pulling-text="下拉刷新" on-refresh="vm.doRefresh()"></ion-refresher>
+        <!--SSO:{{vm.token}} &nbsp;&nbsp;UserName:{{vm.username}}-->
+        <div class="list-default" ng-if="vm.lists.length == 0">
+            暂无内容
+        </div>
+        <ion-list ng-if="vm.lists.length != 0">
+            <ion-item class="subscribe item-thumbnail-left conference-brief white-bg" ng-repeat="list in vm.lists">
+                <div class="row" ui-sref="conferenceDetail({id: list.id})">
+                    <!--<div class="col col-20 pic">-->
+                    <!--<img ng-if="list.roomSub[0]['coverImg.s'] != ''" ng-src="{{vm.formatSrc(list.roomSub[0]['coverImg.s'])}}">-->
+                    <!--<img ng-if="list.roomSub[0]['coverImg.s'] == ''" ng-src="img/list-mrtx.png">-->
+                    <!--</div>-->
+                    <!--<div class="info-box col col-50" ui-sref="chooseUsers({id: list.roomSub[0]['id.s'], flag: 3})">-->
+                    <!--<div class="f13 c333" ng-init="title=list.roomSub[0]['purpose.s']" ui-sref="chooseUsers({id: list.roomSub[0]['id.s'], flag: 3})">-->
+                    <!--{{title | subStringTitle}}-->
+                    <!--</div>-->
+                    <!--<div class="f12 c999">{{list.roomSub[0]["roomName.s"] | subStringTitle}}</div>-->
+                    <!--<h6 class="f12 c999">{{list.roomSub[0]["timeSlot.s"]}}</h6>-->
+                    <!--</div>-->
+                    <!--<div class="pl30 col col-20" ng-if="list.roomSub[0]['status.s'] != '500'">-->
+                    <!--<button class="subBtnPosition" ng-click="vm.applyCancel(list.roomSub[0]['id.s'])">取消</button>-->
+                    <!--</div>-->
+                    <div class="col col-20 ">
+                        {{list.name}}
+                    </div>
+                    <div class="col col-80 ar orange">
+                        9:00-10:00
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-20 user-name">
+                        {{list.createUserName}}
+                    </div>
+                    <div class="col col-40 boardroom-name">
+                        {{list.boardroomName}}
+                    </div>
+                    <div class="col col-40 ar orange">
+                        {{list.createTime | date: 'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div class="dataAll" ng-show="!vm.disabled" ng-bind="vm.dataTips"></div>
+
+        <ion-infinite-scroll on-infinite="vm.loadMore()" distance="1%" ng-if="vm.disabled"
+                             immediate-check="false"></ion-infinite-scroll>
+    </ion-content>
+    <div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>
+</ion-view>

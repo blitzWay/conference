@@ -1,0 +1,138 @@
+<ion-view view-title="会议详情" hide-back-button="true">
+	<ion-nav-buttons side="left">
+		<button class="button button-icon icon ion-ios-arrow-back" ng-click="vm.goBack()"></button>
+	</ion-nav-buttons>
+	<ion-content class="has-footer">
+		<div class="body-scroller">
+			<ion-list class="mb10 c4A f16 ">
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-75 " ng-if="vm.isEdit == false">{{vm.conference.info.name}}</div>
+						<div class="col col-75 " ng-if="vm.isEdit == true">
+							<input type="text" maxlength="35" ng-if="vm.isDetail" style="margin-top: -5px;width: 80%;" ng-model="vm.meetingTitle"/>
+						</div>
+					</div>
+				</ion-item>
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">日期</div>
+						<div class="col col-75 ar">{{vm.conference.info.startTime | date:'yyyy-M-dd hh:mm'}}</div>
+						<!-- <div class="padding0" style="width:90px">会议时间 :</div> -->
+					</div>
+				</ion-item>
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">地点</div>
+						<div class="col col-75 ar">{{vm.conference.info.boardroomName}}</div>
+					</div>
+				</ion-item>
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">发布人员</div>
+						<div class="col col-75 ar">{{vm.conference.info.createUserName}}</div>
+					</div>
+				</ion-item>
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">发布单位</div>
+						<div class="col col-75 ar">{{vm.conference.info.companyName}}</div>
+					</div>
+				</ion-item>
+
+				<div class="split"></div>
+				<ion-item class="subscribe item-borderless">
+					<div class="up-down-block">
+						<div class="title">与会领导</div>
+						<div class="" ng-if="vm.isEdit == true">
+							<span  class="iconEdit right-text" ng-click="vm.chooseUsers()"></span>
+							<div class="text-ww">
+		                        <label ng-model="vm.memberNames">{{vm.memberNames}}</label>
+		                    </div>
+						</div>
+						<div class="" ng-if="vm.isEdit == false">
+							<div class="row">
+								<div class="avatar-up-down col col-20" ng-repeat="item in vm.conference.participants">
+									<span ng-model="item.memberNames">{{item.realName}}</span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</ion-item>
+				<div class="split"></div>
+				<ion-item class="subscribe item-borderless">
+					<div class="up-down-block">
+						<div class="title">会议内容</div>
+						<div class="" ng-if="vm.isEdit == true">
+						</div>
+						<div class="" ng-if="vm.isEdit == false">
+							<div class="row">
+
+								<span ng-if="vm.conference.info.content">
+									{{vm.conference.info.content}}
+								</span>
+								<span ng-if="!vm.conference.info.content">
+									暂无会议内容！
+								</span>
+							</div>
+						</div>
+					</div>
+				</ion-item>
+
+				<div class="split"></div>
+
+				<ion-item class="">
+					<div class="row">
+						<div class="col col-25 detail-icon" ng-click="vm.toMore('file')">
+							<img src="/img/demo-avatar.jpg" alt="" class="detail-icon-img">
+							<span class="detail-icon-text">会议文件</span>
+						</div>
+						<div class="col col-25 detail-icon" ng-click="vm.toMore('address')">
+							<img src="/img/demo-avatar.jpg" alt="" class="detail-icon-img">
+							<span class="detail-icon-text">详细地址</span>
+						</div>
+						<div class="col col-25 detail-icon" ng-click="vm.toMore('notice')">
+							<img src="/img/demo-avatar.jpg" alt="" class="detail-icon-img">
+							<span class="detail-icon-text">会议须知</span>
+						</div>
+						<div class="col col-25 detail-icon" ng-click="vm.toMore('members')">
+							<img src="/img/demo-avatar.jpg" alt="" class="detail-icon-img">
+							<span class="detail-icon-text">与会人员</span>
+						</div>
+					</div>
+				</ion-item>
+
+				<div class="split"></div>
+
+				<ion-item class="subscribe item-borderless" ng-if="vm.conference.info.remark">
+					<div class="up-down-block">
+						<div class="title">会议说明</div>
+						<span>
+							{{vm.conference.info.remark}}
+						</span>
+					</div>
+				</ion-item>
+				<ion-item ng-if="vm.isDetail" class="subscribe item-borderless">
+					<div class="row padding0">
+						<div class="col col-26 titleMeet-25">通知提醒 :</div>
+						<div class="right-text col-75">
+							<select ng-model="vm.noticeSelect" class="noticeSelect cgold">
+								<option value="2" selected="selected">会前2小时</option>
+                                <option value="1">会前1小时</option>
+                                <option value="0.5">会前半小时</option>
+								<option value="0">不提醒</option>
+							</select>
+						</div>
+					</div>
+				</ion-item>
+
+			</ion-list>
+		</div>
+	</ion-content>
+	<ion-footer-bar ng-if="vm.isDetail" align-title="left">
+		<div class="body-scroller text-center">
+			<button class="button button-positive btn-style" ng-click="vm.saveBtnClick()" >保存并通知与会人员</button>
+		</div>
+	</ion-footer-bar>
+	<div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>
+</ion-view>

@@ -1,0 +1,27 @@
+<ion-view view-title="{{vm.data.title}}" hide-back-button="true">
+	<ion-nav-buttons side="left">
+		<button class="button button-icon icon ion-ios-arrow-back" ng-click="vm.goBack()"></button>
+	</ion-nav-buttons>
+	<ion-content class="has-footer" >
+		<div ng-if="vm.data.field == 'file'">
+			<ion-list ng-if="vm.data.data">
+
+			</ion-list>
+			<span ng-if="!vm.data.files">No Files!</span>
+
+		</div>
+		<div ng-if="vm.data.field == 'address'">
+			No address !
+		</div>
+		<div ng-if="vm.data.field == 'notice'">
+			{{vm.data.data}}
+		</div>
+		<div ng-if="vm.data.field == 'members'">
+			<ion-list>
+				<ion-item ng-repeat="list in vm.data.data">
+					{{list.realName}}
+				</ion-item>
+			</ion-list>
+		</div>
+	</ion-content>
+</ion-view>

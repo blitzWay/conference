@@ -1,0 +1,32 @@
+<ion-view title="预订时间" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-back" on-tap="vm.goBack()"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header has-footer">
+        <ion-list class="dateTimeContent">
+         <ion-item class="subscribe item-borderless mb30 ml20">
+                <div class="row padding0 f16">
+                    <div class="col col-50 padding0">开始时间 </div>
+                    <div class="col" ion-datetime-picker am-pm seconds ng-model="startDatetimeValue" only-valid ="{'after':vm.minDate}" ng-init="startDatetimeValue = ''">
+                        <span ng-if="startDatetimeValue == ''" class="f14 h34 cgold">请选择</span>
+                        <span id="sDateTime" class="f14 h34 cgold">{{startDatetimeValue | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+                    </div>
+                </div>
+            </ion-item>
+            <ion-item class="subscribe item-borderless">
+                <div class="row padding0 f16">
+                    <div class="col col-50 padding0">结束时间</div>
+                    <div class="col" ion-datetime-picker ng-model="endDatetimeValue" am-pm seconds only-valid ="{'after':vm.minDate}" ng-init="endDatetimeValue = ''">
+                        <span ng-if="endDatetimeValue == ''" class="f14 h34 cgold">请选择</span>
+                        <span id="eDateTime" class="f14 h34 cgold">{{endDatetimeValue | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <ion-footer-bar align-title="left">
+        <div class="body-scroller text-center">
+            <button class="button button-positive btn-style" ng-click="vm.goNext()">下一步</button>
+        </div>
+    </ion-footer-bar>
+</ion-view>

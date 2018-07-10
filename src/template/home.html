@@ -1,0 +1,121 @@
+<ion-view title="会务系统" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-back" ng-click="vm.closePage()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right" class="bar-positive">
+        <button menu-toggle="left" class="button button-icon icon" ui-sref="list">预订</button>
+    </ion-nav-buttons>
+    <ion-content class="has-header" overflow-scrolling="false">
+        <div class="tabs-striped tabs-top">
+            <div class="tabs">
+                <a class="tab-item" ng-class="vm.currentTab=='latest'?'active': ''" ng-click="vm.switchTab('latest')">
+                    最近会议
+                </a>
+                <a class="tab-item" ng-class="vm.currentTab=='history'?'active': ''" ng-click="vm.switchTab('history')">
+                    历史会议
+                </a>
+                <a class="tab-item" ng-class="vm.currentTab=='subscribe'?'active': ''" ng-click="vm.switchTab('subscribe')">
+                    我的预定
+                </a>
+            </div>
+
+
+        </div>
+        <div style="border-bottom: solid 1px transparent"></div>
+        <ion-refresher ng-if="vm.listItem.length != 0" pulling-text="下拉刷新"
+                       on-refresh="vm.pushRefresh()"></ion-refresher>
+        <div class="list-default" ng-if="vm.listItem.length == 0">暂无内容</div>
+
+        <ion-list ng-if="vm.listItem.length != 0" class="double-header">
+            <ion-item ng-repeat="list in vm.listItem"
+                      class="item item-thumbnail-left conference-brief">
+                <div class="row" ui-sref="conferenceDetail({id: list.id, flag: 1})">
+                    <div class="col col-20 ">
+                        {{list.name}}
+                    </div>
+                    <div class="col col-80 ar orange">
+                        <span ng-if="list.reserves[0].reserveType==1">
+                            上午
+                        </span>
+                        <span ng-if="list.reserves[0].reserveType==2">
+                            下午
+                        </span>
+                        <span ng-if="list.reserves[0].reserveType==3">
+                            全天
+                        </span>
+                    </div>
+                </div>
+                <div class="row" ui-sref="chooseUsers({id: list.roomSub[0]['id.s'], flag: 3})">
+                    <div class="col col-50">
+                        {{list.createUserName}}
+                        <span class="boardroom-name">
+                            {{list.boardroomName}}
+                        </span>
+                    </div>
+                    <div class="col col-50 ar orange">
+                        {{list.reserves[0].reserveDate}}
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div class="dataAll" ng-show="!vm.disabled" ng-bind="vm.dataTips"></div>
+
+        <ion-infinite-scroll on-infinite="vm.nextPage()" distance="1%" ng-if="vm.disabled"
+                             immediate-check="false"></ion-infinite-scroll>
+    </ion-content>
+    <ion-content class="has-header hidden" overflow-scrolling="false">
+        <ion-refresher ng-if="vm.listItem.length != 0" pulling-text="下拉刷新"
+                       on-refresh="vm.pushRefresh()"></ion-refresher>
+        <!--<input ng-model="vm.script"/><button ng-click="vm.runScript()">执行</button>-->
+        <div class="white-bg changeDate">
+            <div class="row ac">
+                <div class="col col-33" ui-sref="latest">
+                    最近会议
+                </div>
+                <div class="col col-33 border-x" ui-sref="history">
+                    历史会议
+                </div>
+                <div class="col col-33" ui-sref="subscribe">
+                    我的预定
+                </div>
+            </div>
+        </div>
+        <ion-list ng-if="vm.listItem.length != 0">
+            <ion-item ng-repeat="list in vm.listItem"
+                      class="item item-thumbnail-left conference-brief">
+                <div class="row" ui-sref="conferenceDetail({id: list.id, flag: 1})">
+                    <div class="col col-20 ">
+                        {{list.name}}
+                    </div>
+                    <div class="col col-80 ar orange">
+                        <span ng-if="list.reserves[0].reserveType==1">
+                            上午
+                        </span>
+                        <span ng-if="list.reserves[0].reserveType==2">
+                            下午
+                        </span>
+                        <span ng-if="list.reserves[0].reserveType==3">
+                            全天
+                        </span>
+                    </div>
+                </div>
+                <div class="row" ui-sref="chooseUsers({id: list.roomSub[0]['id.s'], flag: 3})">
+                    <div class="col col-50">
+                        {{list.createUserName}}
+                        <span class="boardroom-name">
+                            {{list.boardroomName}}
+                        </span>
+                    </div>
+                    <div class="col col-50 ar orange">
+                        {{list.reserves[0].reserveDate}}
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div class="dataAll" ng-show="!vm.disabled" ng-bind="vm.dataTips"></div>
+
+        <ion-infinite-scroll on-infinite="vm.nextPage()" distance="1%" ng-if="vm.disabled"
+                             immediate-check="false"></ion-infinite-scroll>
+    </ion-content>
+    <div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>
+</ion-view>

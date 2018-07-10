@@ -1,0 +1,26 @@
+{
+  "name": "angular client",
+  "description": "angular",
+  "main": "gulpfile.js",
+  "authors": [
+    "yujp"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ionic": "bower-ionic#^1.3.3",
+    "ionic-datepicker": "1.0.0",
+    "ion-datetime-picker": "^0.5.2"
+  },
+  "resolutions": {
+    "angular": "1.5.3"
+  }
+}

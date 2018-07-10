@@ -1,0 +1,62 @@
+<ion-view title="会议室预订" hide-back-button="true">
+	 <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-back" ng-click="vm.goBack()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right" class="bar-positive">
+        <button menu-toggle="left" class="button button-icon icon" ui-sref="subscribe">我的预订</button>
+    </ion-nav-buttons>
+	<ion-content class="has-header" overflow-scrolling="false">
+		<ion-refresher ng-if="vm.listItem.length != 0" pulling-text="下拉刷新" on-refresh="vm.pushRefresh()"></ion-refresher>
+
+		<div class="white-bg changeDate">
+			<div class="bg">
+				<div class="width33" ng-model="yesterday" ng-click="yesterdayClick()">
+					<button>前一天</button>
+				</div>
+				<span class="width33" ng-model="dateValue" ng-click="dateOpen()">{{dateValue}}</span>
+				<div class="width33" ng-model="tomorrow" ng-click="tomorrowClick()" style="text-align: right">
+					<button ng-disabled="vm.isDisabled" ng-class="{'true' : 'btnDisabled', 'false' : 'btnEnabled'}[vm.isDisabled]">后一天</button>
+				</div>
+			</div>
+		</div>
+		<!--<div class="list-default" ng-if="vm.listItem.length == 0">暂无内容</div>-->
+		<ion-list ng-if="vm.listItem.length != 0">
+			<ion-item ng-repeat="list in vm.listItem" class="item item-thumbnail-left" >
+				<div class="item-content" >
+					<div class="pic">
+						<img class="img" ng-if="list.boardroomPic" ng-src="{{'//121.196.221.153:8085/' + list.boardroomPic[0].thumbnailPath}}" />
+						<img class="img"  ng-if="list.room[0]['coverImg.s'] ==''" ng-src="img/list-mrtx.png">
+					</div>
+					<div class="info-box">
+						<div class="f13 c333 lh13">{{list.boardroomName}}</div>
+						<div class="f13 c333 lh13 mt10">容纳人数:{{list.boardroom.capacity}}</div>
+						<div class="f13 c333 lh13 mt5">楼&nbsp;&nbsp;&nbsp;&nbsp;层:{{list.boardroom.floor}}</div>
+						<div class="f13 c333 lh13 mt5">房&nbsp;间&nbsp;号:{{list.boardroom.room}}</div>
+					</div>
+					<div class="pl30 info-box">
+						<button class="btnPosition" ui-sref="detail({roomId:list.boardroomId})">点击查看</button>
+						<button class="immediateBooking" ng-if="list.reserveType != 3" ng-click="vm.bookingButton(list)">立即预订</button>
+					</div>
+				</div>
+				<!--<div class="info-box" ng-init="roomSubList=list.room[1]['roomSubList']">-->
+					<!--<div ng-if="roomSubList.length != 0">-->
+					<!--<div class="f12 c333 lh12">预订情况 </div>-->
+						<!--<div class="gray-bg">-->
+							<!--<dl ng-repeat="subList in roomSubList">-->
+								<!--<dd class="f12 c666 lh24">-->
+									<!--{{subList["roomSub"][0]["timeSlot.s"]}}-->
+								<!--</dd>-->
+								<!--<dd class="f12 c333 lh24">{{subList["roomSub"][0]["purpose.s"] | subStrMeetingTitle}}</dd>-->
+								<!--<dt class="f12 c666 lh24">{{subList["roomSub"][0]["userName.s"]}}</dt>-->
+							<!--</dl>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			</ion-item>
+		</ion-list>
+		<div class="dataAll" ng-show="!vm.disabled" ng-bind="vm.dataTips"></div>
+
+		<ion-infinite-scroll on-infinite="vm.nextPage()" distance="1%" ng-if="vm.disabled" immediate-check="false"></ion-infinite-scroll>
+	</ion-content>
+	<div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>
+</ion-view>

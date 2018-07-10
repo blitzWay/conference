@@ -1,0 +1,24 @@
+﻿<config>
+  <!-- 应用ID -->
+  <appid>conference</appid>
+  <!-- 应用名称 -->
+  <appname>会务系统</appname>
+  <!-- 应用版本 -->
+  <version>1.0.1</version>
+  <!-- 应用描述 -->
+  <description>会务系统</description>
+  <!-- 启动页 -->
+  <htmlname>index.html</htmlname>
+  <!-- 是否隐藏标题栏 1 隐藏 0 不隐藏-->
+  <hiddentitlebutton>1</hiddentitlebutton>
+  <!-- 是否隐藏返回按钮 1 隐藏 0 不隐藏-->
+  <hiddenbackbutton>1</hiddenbackbutton>
+  <!-- 是否隐藏关闭按钮 1 隐藏 0 不隐藏-->
+  <hiddenclosebutton>1</hiddenclosebutton>
+  <!-- 引擎选项 1 云适配引擎 0 默认引擎-->
+  <enginetype>0</enginetype>
+  <!-- 是否开启JS SDK 1 开启 0 不开启-->
+  <jssdk>1</jssdk>
+  <!-- logo-->
+  <logo>logo.png</logo>
+</config>

@@ -1,0 +1,21 @@
+<ion-view view-title="{{vm.dTitle}}" hide-back-button="true">
+	<ion-nav-buttons side="left">
+		<button class="button button-icon icon ion-ios-arrow-back" on-tap="vm.goBack()"></button>
+	</ion-nav-buttons>
+	<ion-content class="has-footer">
+		<div class="body-scroller">
+            <div ng-repeat="user in vm.users" class="avatar-wrapper col-20" ng-click="vm.chooseUsersDetail(user.id)">
+                <div class="item-avatar {{vm.selected[user.id].selected?'checked':''}}">
+                   <img src="img/demo-avatar.jpg">
+                 </div>
+                <p>{{user.name}}</p>
+            </div>
+		</div>
+	</ion-content>
+	<ion-footer-bar ng-if="vm.isDetail" align-title="left">
+		<div class="body-scroller text-center">
+			<button class="button button-positive btn-style" ng-click="vm.saveBtnClick()" >保存开会人员</button>
+		</div>
+	</ion-footer-bar>
+	<div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>
+</ion-view>

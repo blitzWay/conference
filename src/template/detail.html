@@ -1,0 +1,48 @@
+<ion-view view-title="预订详情" hide-back-button="true">
+	<ion-nav-buttons side="left">
+		<button class="button button-icon icon ion-ios-arrow-back" on-tap="vm.goBack()"></button>
+	</ion-nav-buttons>
+	<ion-content class="has-footer">
+		<div style="margin: 0 auto;">
+			<img class="image-viewer" ng-if="vm.carousels != ''" ng-src="{{ vm.carousels }}">
+			<img class="image-viewer" ng-if="vm.carousels == ''" src="img/list-mrtx.png">
+		</div>
+		<ion-list class="mb10 c4A f16 ">
+			<ion-item class="detailItem item-borderless ">
+				<div class="row padding0 mb10">
+					<div class="col col-80 padding0"><h2>{{ vm.details['name.s'] }}</h2> </div>
+				</div>
+			</ion-item>
+			<ion-item class="detailItem item-borderless">
+				<div class="row padding0">
+					<div class="col col-33 padding0">会议室地址 : </div>
+					<div class="col col-50 padding0">{{ vm.details['floor'] + vm.details['room'] }}</div>
+				</div>
+			</ion-item>
+			<ion-item class="detailItem item-borderless">
+				<div class="row padding0">
+					<div class="col col-33 padding0">可容纳人数 :</div>
+					<div class="col col-50 padding0">{{ vm.details['capacity'] }}人</div>
+				</div>
+			</ion-item>
+			<ion-item class="detailItem item-borderless">
+				<div class="row padding0">
+					<div class="col col-33 padding0">会议室管理员 :</div>
+					<div class="col padding0">{{ vm.details['createUserId'] }} </div>
+				</div>
+			</ion-item>
+			<ion-item class="detailItem item-borderless">
+				<div class="row padding0">
+					<div class="col col-33 padding0">提供设备 :</div>
+					<div class="col col-67 padding0 text-ww">{{vm.details['meetingType']}}</div>
+				</div>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+	<ion-footer-bar>
+		<div class="text-center" style="width: 100%">
+			<button class="button button-positive btn-style" ui-sref="appointmentTime({roomId: vm.details['id.s'], roomName: vm.details['name.s']})">预订会议室</button>
+		</div>
+	</ion-footer-bar>
+	<div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>
+</ion-view>
