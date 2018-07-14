@@ -24,7 +24,7 @@
             vm.disabled = false; // 滚动加载开关
             vm.startRows = 0; // 数据起始值
             vm.rowsCount = 1; // 滚动加载次数
-            vm.pageSize = 10; // 每页加载大小
+            vm.pageSize = 50; // 每页加载大小
             vm.isActive = true; // 数据加载loading是否显示
 
             // 调用获取数据
@@ -32,25 +32,25 @@
                 vm.getDatas();
             });
 
-          appnest.config.getUserInfo({
-            success: function (res) {
-              vm.username= res.userName; // 用户名
-              vm.password= res.password;//用户密码
-              vm.token= res.loginId;//用户标识
-              vm.imAccount= res.imAccount;//用户 IM 账号
-              vm.photoUrl = res.photoUrl; //用户头像地址
-            },
-            fail: function (res) {
-              alert(res.errMsg);
-            }
-          });
+          // appnest.config.getUserInfo({
+          //   success: function (res) {
+          //     vm.username= res.userName; // 用户名
+          //     vm.password= res.password;//用户密码
+          //     vm.token= res.loginId;//用户标识
+          //     vm.imAccount= res.imAccount;//用户 IM 账号
+          //     vm.photoUrl = res.photoUrl; //用户头像地址
+          //   },
+          //   fail: function (res) {
+          //     alert(res.errMsg);
+          //   }
+          // });
         }
 
         function formatSrc(src) {
             return $sce.trustAsResourceUrl(src);
         }
         function getDatas() {
-            vm.params = {orderBy: 1, pageNum: 0, pageSize: 10};
+            vm.params = {orderBy: 1, pageNum: 0, pageSize: 50};
 
             publicService.sendRequest('getMySubscribe', vm.params, function(msg) {
                 console.log(msg);

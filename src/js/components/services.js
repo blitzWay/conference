@@ -40,7 +40,14 @@
 
         // 假数据
         var url = '/js/json/' + postMethod + '.json';
-        var base = 'http://121.196.221.153:8085/meeting-manager/conferenceOpenApi/';
+        var base;
+        if (!window.chrome) {
+          base = 'http://10.30.1.231:8080/meeting-manager/conferenceOpenApi/';
+        } else {
+          base = 'http://121.196.221.153:8085/meeting-manager/conferenceOpenApi/';
+        }
+
+
         var params = {};
         var method = 'GET';
         var userId = $rootScope.sso;
@@ -61,13 +68,20 @@
           }
           case 'getRecentConferenceApplyList': {
             url = base + 'recentConferenceApplyList';
-            params = {userId: userId, orderBy: 1, pageNum: 0, pageSize: 10};
+            params = bObj;
             method = 'POST';
             callback = defaultCb
             break;
           }
           case 'getRoomList': {
             url = base + 'reserveInfoByDay';
+            params = bObj
+            method = 'POST';
+            callback = defaultCb
+            break;
+          }
+          case 'conferenceList': {
+            url = base + 'conferenceList';
             params = bObj
             method = 'POST';
             callback = defaultCb
@@ -109,7 +123,7 @@
             break;
           }
           case 'checkSso': {
-            url = 'http://10.30.1.231:8080/meeting-manager/conferenceOpenApi/checkSso';
+            url = base + 'checkSso';
             method = 'POST';
             params = {token: $rootScope.token};
             callback = defaultCb;
@@ -150,7 +164,8 @@
         if(!window.chrome) {
           publicService.sendRequest('checkSso', {}, function(data){
             if (data.status) {
-              $rootScope.sso = data;
+              console.log(data);
+              $rootScope.sso = data.data.useruuid;
             }else {
               alert(JSON.stringify(data));
               alert(JSON.stringify(window.location.search));

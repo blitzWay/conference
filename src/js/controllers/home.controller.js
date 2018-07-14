@@ -22,21 +22,29 @@
     vm.script='';
     vm.runScript = runScript;
     $rootScope.backStatus = 'close';
-    vm.currentTab = 'latest';
+    vm.currentTab = $rootScope.homeTab;
     vm.switchTab = switchTab;
-
+    var typeMap = {
+      'latest': 'getRecentConferenceApplyList',
+      'history': 'history',
+      'subscribe': 'conferenceList'
+    };
     function init() {
       vm.pageNum = 1;
-      vm.pageSize = 50;
-      // vm.rowsCount = 1; // 滚动加载次数
+      vm.pageSize = 10;
+      vm.rowsCount = 1; // 滚动加载次数
       // vm.listData = '';
       // vm.listItem = '';
-      // vm.isActive = true;
-      // vm.disabled = true; // 滚动加载开关
+      vm.isActive = true;
+      vm.disabled = false; // 滚动加载开关
 
-      vm.username = ''
-      vm.token = $rootScope.sso
-      console.log(vm.token)
+      vm.username = '';
+      vm.token = $rootScope.sso;
+      if(!$rootScope.homeTab){
+        vm.currentTab = $rootScope.homeTab = 'latest';
+      } else {
+        vm.currentTab = $rootScope.homeTab;
+      }
 
       $scope.$on('$ionicView.afterEnter', function(){
         if ($rootScope.sso == undefined || $rootScope.sso == '' ) {
@@ -58,44 +66,39 @@
 
     //获取会议室列表
     function getList() {
+      vm.isActive = true;
       var dataStr = {
         'userId': $scope.dateValue,
-        'orderBy': vm.startRows,
-        'pageNum': 1,
+        // 'orderBy': vm.startRows,
+        'pageNum': vm.pageNum,
         pageSize: vm.pageSize
       };
-      var typeMap = {
-        'latest': 'getRecentConferenceApplyList',
-        'history': 'history',
-        'subscribe': 'getMySubscribe'
-      };
+
       publicService.sendRequest(typeMap[vm.currentTab], dataStr, function(data) {
-        console.log(data);
         var list = [];
         var count = 0;
-        vm.isActive = false;
         vm.code = data.status?0:-1;
+        vm.isActive = false;
         if (vm.code === 0) {
           // 判断是否执行滚动加载
           switch(vm.currentTab) {
             case 'latest': {
               list = data.data.datas;
-              count = data.data.count;
+              count = data.data.datas.length;
               break;
             }
             case 'history': {
               list = data.data;
-              count = 0;
+              count = data.data.length;
               break;
             }
             case 'subscribe': {
-              list = data.data.datas;
-              count = data.data.count;
+              list = data.data;
+              count = data.data.length;
               break;
             }
           }
           if (list && list.length) {
-            // vm.listData = data.data.datas.shift(); //count
             vm.listItem = list;
             vm.count = data.data.count;
             console.log(vm.listData,vm.listItem)
@@ -129,7 +132,8 @@
       $timeout(function() {
         vm.startRows = 0;
         vm.rowsCount = 1;
-        // vm.isActive = true;
+        vm.isActive = true;
+        vm.pageNum = 1;
         vm.getList();
       }, 50);
       vm.disabled = true;
@@ -138,15 +142,36 @@
     // 滚动加载
     function nextPage() {
       var dataStr = {
-        pageNum: '',
+        'userId': $scope.dateValue,
+        // 'orderBy': vm.startRows,
+        'pageNum': ++vm.pageNum,
+        pageSize: vm.pageSize
       };
-      publicService.sendRequest('getRoomList', dataStr, function(data) {
-        vm.code = data[0]['h'][0]['code.i'];
+
+      publicService.sendRequest(typeMap[vm.currentTab], dataStr, function(data) {
+        var list, count;
+        vm.code = data.status?0:-1;
         if (vm.code == 0) {
-          vm.empty = data[1].b[0]['value.s'];
-          if (vm.empty == undefined) {
-            vm.listData = data[1].b[0]['roomList'].shift(); //截取第一条数据
-            vm.item = data[1].b[0]['roomList'];
+          switch(vm.currentTab) {
+            case 'latest': {
+              list = data.data.datas;
+              count = data.data.datas.length;
+              break;
+            }
+            case 'history': {
+              list = data.data;
+              count = data.data.length;
+              break;
+            }
+            case 'subscribe': {
+              list = data.data;
+              count = data.data.length;
+              break;
+            }
+          }
+          vm.empty = list.length;
+          if (vm.empty) {
+            vm.item = list;
             var len = vm.item.length;
             if (len > 0) {
               for (var i = 0; i < len; i++) {
@@ -176,7 +201,8 @@
 
 
     function switchTab(tabName){
-      vm.currentTab = tabName;
+      $rootScope.homeTab = vm.currentTab = tabName;
+      vm.pageNum = 1;
       vm.listItem = [];
       vm.getList();
     }
@@ -184,7 +210,10 @@
      * 关闭轻应用
      */
     function closePage() {
-      ns.runtime.closePage();
+      var vConsole = new VConsole();
+      if(window.appnest){
+        window.appnest.navigation.closeWindow();
+      }
     }
   }
 })();

@@ -31,10 +31,12 @@
           vm.users = users.filter(function (node) {
             return node.nodeType === '3'
           })
-          $rootScope.selected = {}
-          vm.users.forEach(function(value){
-            $rootScope.selected[value.id] = value
-          })
+          if(!$rootScope.selected){
+            $rootScope.selected = {}
+            vm.users.forEach(function(value){
+              $rootScope.selected[value.id] = value
+            })
+          }
 
           vm.selected = $rootScope.selected
         })
@@ -63,7 +65,8 @@
      * flag 1表示预订时间跳转到这个页面，2表示壳子端消息，3表示从我的预订点击过来查看详情
      */
     function goBack() {
-      $ionicHistory.goBack();
+      // $ionicHistory.goBack();
+      window.history.go(-1)
     }
   }
 })();

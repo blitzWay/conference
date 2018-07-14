@@ -63,7 +63,7 @@
             vm.isActive = false;
             if (msg.status) {
               vm.details = msg.data.boardroom;
-              vm.details['coverImg.s'] = '//121.196.221.153:8085/' + msg.data.boardroomPic[0].thumbnailPath
+              vm.details['coverImg.s'] = msg.data.boardroomPic[0]?'http://10.30.1.231:8080' + msg.data.boardroomPic[0].thumbnailPath : ''
               var roomName = vm.details['name'];
               vm.carousels = $sce.trustAsResourceUrl(vm.details['coverImg.s']);
               $state.go('chooseUsers', {
@@ -87,7 +87,7 @@
             vm.isActive = false;
             if (msg.status) {
               vm.details = msg.data.boardroom;
-              vm.details['coverImg.s'] = '//121.196.221.153:8085/' + msg.data.boardroomPic[0].thumbnailPath
+              vm.details['coverImg.s'] = msg.data.boardroomPic[0]?'http://10.30.1.231:8080' + msg.data.boardroomPic[0].thumbnailPath : ''
               var roomName = vm.details['name'];
               vm.carousels = $sce.trustAsResourceUrl(vm.details['coverImg.s']);
               $state.go('chooseUsers', {
@@ -113,7 +113,7 @@
             vm.isActive = false;
             if (msg.status) {
               vm.details = msg.data.boardroom;
-              vm.details['coverImg.s'] = '//121.196.221.153:8085/' + msg.data.boardroomPic[0].thumbnailPath
+              vm.details['coverImg.s'] = msg.data.boardroomPic[0]?'http://10.30.1.231:8080' + msg.data.boardroomPic[0].thumbnailPath : ''
               var roomName = vm.details['name'];
               vm.carousels = $sce.trustAsResourceUrl(vm.details['coverImg.s']);
               $state.go('chooseUsers', {
@@ -168,6 +168,7 @@
         callback: function (val) {
           $scope.dateValue = $filter('date')(val, 'yyyy-MM-dd');
           startDateObj.inputDate = new Date(val); //更新日期弹框上的日期
+          vm.getRoomList();
         },
         from: new Date(2010, 1, 1),
         to: vm.maxDate,

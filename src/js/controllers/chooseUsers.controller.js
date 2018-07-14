@@ -28,6 +28,7 @@
     function init() {
       var sta = ['', '08:00', '12:00', '00:00']
       var stb = ['', '12:00', '18:00', '24:00']
+      var reservTypes = ['', '上午', '下午', '全天']
       $stateParams.sTime = $stateParams.dateValue + ' ' + sta[$stateParams.reserveType];
       $stateParams.eTime = $stateParams.dateValue + ' ' + stb[$stateParams.reserveType];
       var all_user = localStorage.getItem('names');
@@ -35,7 +36,8 @@
       vm.flag = $stateParams.flag;
       if (vm.flag == 1) {
         //正常点击预订选择完人员后 点击保存显示数据
-        vm.meetingTime = $stateParams.sTime + '至' + $stateParams.eTime;
+        // vm.meetingTime = $stateParams.sTime + '至' + $stateParams.eTime;
+        vm.meetingTime = $stateParams.dateValue + ' ' + reservTypes[$stateParams.reserveType];
         vm.dateValue = $stateParams.dateValue;
         vm.reserveType = $stateParams.reserveType;
         vm.loginName = $stateParams.loginName;
@@ -54,6 +56,12 @@
           vm.getDetail();
         });
       }
+      console.log($rootScope.tempConference)
+      if ($rootScope.tempConference) {
+        vm.meetingTitle = $rootScope.tempConference.name;
+        vm.content = $rootScope.tempConference.content;
+        $rootScope.tempConference = null;
+      }
     }
 
     function getDetail() {
@@ -62,8 +70,8 @@
         'id.s': vm.subId
       };
       vm.isDetail = false;
-      vm.dTitle = '预定详情';
-      publicService.sendRequest('getRoomSubById', params, function (msg) {
+      vm.dTitle = '预订详情';
+      publicService.sendRequest('getRoomById', params, function (msg) {
         if (msg[0].h[0]['code.i'] == 0) {
           vm.details = msg[1].b[0].roomSub[0];
           vm.roomName = vm.details['roomName.s'];
@@ -77,6 +85,10 @@
     }
 
     function chooseUsers() {
+      $rootScope.tempConference = {
+        name: vm.meetingTitle,
+        content: vm.content
+      };
       $state.go('chooseUsersDetail', {flag: 4});
       console.log('fd');
       vm.flag = 4;
@@ -84,52 +96,55 @@
 
 
       var list = [], i;
-      ns.runtime.contact({
-        'onSuccess': function (msg) {
-          list = msg.obj;
-          if (list.length <= 0) {
-            return false;
-          }
-          vm.memberNames = '';
-          vm.memberIds = '';
-          vm.memberLoginNames = '';
-          for (i = 0; i < list.length; i += 1) {
-            if ((i + 1) == list.length) {
-              vm.memberNames += list[i]['user'].realName;
-              vm.memberLoginNames += list[i]['user'].userName;
-              vm.memberIds += list[i]['userAgencyJobs'][0]['userId'];
-            } else {
-              vm.memberNames += list[i]['user'].realName + '、';
-              vm.memberLoginNames += list[i]['user'].userName + ',';
-              vm.memberIds += list[i]['userAgencyJobs'][0]['userId'] + ',';
-            }
-          }
-          //处理返回后无法自动刷新立刻显示的问题
-          setTimeout(function () {
-            $scope.$apply(function () {
-              vm.memberNames = vm.memberNames;
-            });
-          }, 200);
-        },
-        'onFail': function (msg) {
-          $ionicLoading.show({
-            template: '<span class="tips">人员选择打开失败</span>',
-            noBackdrop: true,
-            duration: 2000
-          });
-        }
-      });
+      // ns.runtime.contact({
+      //   'onSuccess': function (msg) {
+      //     list = msg.obj;
+      //     if (list.length <= 0) {
+      //       return false;
+      //     }
+      //     vm.memberNames = '';
+      //     vm.memberIds = '';
+      //     vm.memberLoginNames = '';
+      //     for (i = 0; i < list.length; i += 1) {
+      //       if ((i + 1) == list.length) {
+      //         vm.memberNames += list[i]['user'].realName;
+      //         vm.memberLoginNames += list[i]['user'].userName;
+      //         vm.memberIds += list[i]['userAgencyJobs'][0]['userId'];
+      //       } else {
+      //         vm.memberNames += list[i]['user'].realName + '、';
+      //         vm.memberLoginNames += list[i]['user'].userName + ',';
+      //         vm.memberIds += list[i]['userAgencyJobs'][0]['userId'] + ',';
+      //       }
+      //     }
+      //     //处理返回后无法自动刷新立刻显示的问题
+      //     setTimeout(function () {
+      //       $scope.$apply(function () {
+      //         vm.memberNames = vm.memberNames;
+      //       });
+      //     }, 200);
+      //   },
+      //   'onFail': function (msg) {
+      //     $ionicLoading.show({
+      //       template: '<span class="tips">人员选择打开失败</span>',
+      //       noBackdrop: true,
+      //       duration: 2000
+      //     });
+      //   }
+      // });
     }
 
     function saveBtnClick() {
       var participants = ''
       console.log(vm.selected)
-      var uids = Object.keys(vm.selected)
-      uids.forEach(function(userId){
-        if(vm.selected[userId].selected){
-          participants = participants + vm.selected[userId].id + ','
-        }
-      })
+      if(vm.selected){
+        var uids = Object.keys(vm.selected)
+        uids.forEach(function(userId){
+          if(vm.selected[userId].selected){
+            participants = participants + vm.selected[userId].id + ','
+          }
+        })
+      }
+
       var params = {
         name: vm.meetingTitle,
         content: vm.content,
@@ -140,6 +155,7 @@
         fileIds: '',
         reserveInfo: vm.dateValue + '_' + vm.reserveType
       };
+
       if (vm.meetingTitle == undefined || vm.meetingTitle == '') {
         // 模态框
         $ionicLoading.show({
@@ -172,6 +188,7 @@
             vm.isDetail = true;
             vm.dTitle = '选择人员';
           }
+          $rootScope.selected = {};
         } else {
           $ionicLoading.show({
             template: '<span class="tips">预约失败，' + msg.msg + '</span>',
@@ -188,6 +205,7 @@
      */
     function goBack() {
       window.history.back()
+      $rootScope.selected = null
       // if (vm.flag == 1) {
       //   $ionicHistory.goBack();
       // } else if (vm.flag == 2) {
