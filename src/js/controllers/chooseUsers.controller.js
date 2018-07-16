@@ -12,6 +12,7 @@
     vm.goBack = goBack;
     vm.init = init;
     vm.chooseUsers = chooseUsers;
+    vm.chooseLeaders = chooseLeaders;
     vm.saveBtnClick = saveBtnClick;
     vm.getDetail = getDetail;
     vm.dTitle = '选择人员';
@@ -21,7 +22,8 @@
     vm.noticeSelect = '2';
     vm.isDetail = true; //判断false是选择页面 ,true是展示详情的页面
     vm.isActive = true;
-    vm.selected = $rootScope.selected
+    vm.selected = $rootScope.selected;
+    vm.selectedLeaders = $rootScope.selectedLeaders;
     $rootScope.backStatus = 'detail';
     vm.init();
 
@@ -84,13 +86,41 @@
       });
     }
 
-    function chooseUsers() {
+    function chooseLeaders() {
       $rootScope.tempConference = {
         name: vm.meetingTitle,
         content: vm.content
       };
       $state.go('chooseUsersDetail', {flag: 4});
-      console.log('fd');
+      // console.log('fd');
+      vm.flag = 4;
+      return false;
+    }
+
+    function chooseUsers() {
+      $rootScope.tempConference = {
+        name: vm.meetingTitle,
+        content: vm.content
+      };
+      // $state.go('chooseUsersDetail', {flag: 4});
+      // console.log('fd');
+      var selected;
+      if(vm.selected) {
+        selected = vm.selected.map(function(user){return user.userUuid})
+      }
+      appnest.contact.selectMembersUI({
+        imAccounts: selected,
+        success: function (res) {
+          var memberInfos= res.memberInfos; // 返回成员数组
+          $scope.$apply(function () {
+            vm.selected = memberInfos
+            console.log(vm.selected)
+          });
+        },
+        fail: function (res) {
+          alert(res.errMsg);
+        }
+      });
       vm.flag = 4;
       return false;
 
@@ -135,13 +165,18 @@
 
     function saveBtnClick() {
       var participants = ''
+      var leaders = '';
       console.log(vm.selected)
       if(vm.selected){
-        var uids = Object.keys(vm.selected)
-        uids.forEach(function(userId){
-          if(vm.selected[userId].selected){
-            participants = participants + vm.selected[userId].id + ','
-          }
+        vm.selected.forEach(function(user){
+          participants = participants + user.userUuid + ','
+        })
+      }
+      var ln;
+      if(vm.selectedLeaders){
+        ln = Object.keys(vm.selectedLeaders);
+        ln.forEach(function(user){
+          leaders = leaders + vm.selectedLeaders[user].id + ','
         })
       }
 
@@ -152,6 +187,7 @@
         boardroomId: vm.roomId,
         meetingType: '1',
         participants: participants.replace(/,$/, ''),
+        leaders: leaders.replace(/,$/, ''),
         fileIds: '',
         reserveInfo: vm.dateValue + '_' + vm.reserveType
       };
@@ -179,6 +215,9 @@
               noBackdrop: true,
               duration: 2000
             });
+            setTimeout(function(){
+              window.history.go(-1)
+            }, 2000)
           } else {
             $ionicLoading.show({
               template: '<span class="tips">预约失败</span>',
