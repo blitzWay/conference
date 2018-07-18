@@ -113,7 +113,7 @@
         success: function (res) {
           var memberInfos= res.memberInfos; // 返回成员数组
           $scope.$apply(function () {
-            vm.selected = memberInfos
+            $rootScope.selected = vm.selected = memberInfos
             console.log(vm.selected)
           });
         },
@@ -176,7 +176,7 @@
       if(vm.selectedLeaders){
         ln = Object.keys(vm.selectedLeaders);
         ln.forEach(function(user){
-          leaders = leaders + vm.selectedLeaders[user].id + ','
+          if(user.checked)leaders = leaders + vm.selectedLeaders[user].id + ',';
         })
       }
 
@@ -201,8 +201,12 @@
         });
         return;
       }
+      var loading = $ionicLoading.show({
+        template: '<span class="tips">正在提交</span>',
+      });
       publicService.sendRequest('apply', params, function (msg) {
         var code = msg.status ? 0 : -1;
+        $ionicLoading.hide();
         if (code == 0) {
           vm.result = msg.data;
           if (vm.result) {
@@ -217,7 +221,7 @@
             });
             setTimeout(function(){
               window.history.go(-1)
-            }, 2000)
+            }, 1000)
           } else {
             $ionicLoading.show({
               template: '<span class="tips">预约失败</span>',
@@ -227,7 +231,9 @@
             vm.isDetail = true;
             vm.dTitle = '选择人员';
           }
-          $rootScope.selected = {};
+          $rootScope.selected = null;
+          $rootScope.selectedLeaders = null;
+          $rootScope.tempConference = {};
         } else {
           $ionicLoading.show({
             template: '<span class="tips">预约失败，' + msg.msg + '</span>',
@@ -243,18 +249,16 @@
      * flag 1表示预订时间跳转到这个页面，2表示壳子端消息，3表示从我的预订点击过来查看详情
      */
     function goBack() {
-      window.history.back()
-      $rootScope.selected = null
-      // if (vm.flag == 1) {
-      //   $ionicHistory.goBack();
-      // } else if (vm.flag == 2) {
-      //   //点击壳子的消息跳转过来直接返回 列表页面
-      //   ns.runtime.closePage();
-      //   // $state.go('list', {});
-      // } else if (vm.flag == 3) {
-      //   //返回我的预订页面
-      //   $ionicHistory.goBack();
-      // }
+      $rootScope.selected = null;
+      vm.selectedLeaders = $rootScope.selectedLeaders = null;
+      $rootScope.tempConference = {};
+      window.history.back();
+    }
+
+    function resetForm() {
+      $rootScope.selected = null;
+      vm.selectedLeaders = $rootScope.selectedLeaders = null;
+      $rootScope.tempConference = {};
     }
   }
 })();

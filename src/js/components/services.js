@@ -129,6 +129,12 @@
             callback = defaultCb;
             break;
           }
+          case 'getCompanyLeaders': {
+            url = base + 'getCompanyLeaders';
+            method = 'POST';
+            callback = defaultCb;
+            break;
+          }
         }
         console.log(url)
         $http({

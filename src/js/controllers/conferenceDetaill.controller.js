@@ -14,14 +14,15 @@
     vm.goBack = goBack;
     vm.init = init;
     vm.getConferenceDetail = getConferenceDetail
-    vm.toMore = toMore
-    vm.conference = {}
-    vm.isEdit = false
-    vm.init()
+    vm.toMore = toMore;
+    vm.conference = {};
+    vm.isEdit = false;
+    vm.init();
+    vm.br = '<br>';
 
     function init() {
       vm.getConferenceDetail($stateParams.id)
-
+      console.log('init~')
     }
 
     function getConferenceDetail(id) {
@@ -29,6 +30,12 @@
         {id: id},
         function (resp) {
           vm.conference = resp.data
+          var leaders = resp.data.leaders;
+          if(!leaders.filter(function(e){return e.checked}).length){
+            vm.showLeader = false;
+          }else{
+            vm.showLeaders = true
+          }
         })
     }
     function toMore(field) {
@@ -45,7 +52,8 @@
           break;
         }
         case 'notice': {
-          title = '会议须知'
+          title = '会议须知';
+          data = vm.conference.info.agenda;
           break;
         }
         case 'members': {
@@ -53,18 +61,25 @@
           data = vm.conference.participants
           break;
         }
-        case 'dinner': {
-          title = '用餐信息'
-          data = vm.conference.participants
-          break;
-        }
+        // case 'dinner': {
+        //   title = '用餐信息'
+        //   data = vm.conference.participants
+        //   break;
+        // }
       }
       data = angular.toJson({field: field, title: title, data: data});
       $state.go('conferenceMore',{data: data});
     }
 
     function goBack() {
-      $ionicHistory.goBack();
+      var type = window.decodeURIComponent(window.location.search).match(/type=([a-z\d\-]+)/)
+      if(type && type[1]){
+        type = type[1]
+        if(type==='apply' && window.appnest){
+          appnest.navigation.closeWindow();
+        }
+      }
+      window.history.go(-1)
     }
   }
 })();

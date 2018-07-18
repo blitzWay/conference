@@ -34,7 +34,7 @@
      * Date:2017-9-26
      */
     function goBack() {
-      $state.go('list', {});
+      window.history.go(-1)
     }
 
     /*
@@ -49,7 +49,12 @@
       publicService.sendRequest('getRoomById', params, function (data) {
         vm.isActive = false;
         vm.details = data.data.boardroom;
-        vm.carousels = $sce.trustAsResourceUrl('//121.196.221.153/' + data.data.boardroomPic[0].relativePath);
+        if (data.data.boardroomPic[0]) {
+          vm.carousels = $sce.trustAsResourceUrl('http://10.30.1.231:8080' + data.data.boardroomPic[0].relativePath);
+        } else {
+          vm.carousels = '';
+        }
+        vm.devices = data.data.devices.reduce(function(total, next){return ((total.name?total.name:total) + ',' + next.name)});
       });
     }
   }

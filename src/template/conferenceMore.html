@@ -5,15 +5,53 @@
 	<ion-content class="has-footer" >
 		<div ng-if="vm.data.field == 'file'">
 			<ion-list ng-if="vm.data.data">
-
+				<ion-item ng-repeat="list in vm.data.data" ng-click="vm.downloadFile(list.relativePath, list.fileName)">
+					{{list.fileName}}
+				</ion-item>
 			</ion-list>
-			<span ng-if="!vm.data.files">No Files!</span>
+			<span ng-if="!vm.data.data">
+				<div class="list-default">暂无内容</div>
+			</span>
 
 		</div>
 		<div ng-if="vm.data.field == 'address'">
-			No address !
+			<!--<div class="list-default">暂无内容</div>-->
+			<ion-list class="mb10 c4A f16 ">
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">会议室</div>
+						<div class="col col-75 ar">{{vm.data.data.boardroomName}}</div>
+					</div>
+				</ion-item>
+			</ion-list>
+			<ion-list class="mb10 c4A f16 ">
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">楼层</div>
+						<div class="col col-75 ar">{{vm.data.data.floor}}</div>
+					</div>
+				</ion-item>
+			</ion-list>
+			<ion-list class="mb10 c4A f16 ">
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">房间</div>
+						<div class="col col-75 ar">{{vm.data.data.room}}</div>
+					</div>
+				</ion-item>
+			</ion-list>
+			<ion-list class="mb10 c4A f16 ">
+				<ion-item class="subscribe item-borderless">
+					<div class="row">
+						<div class="col col-25 titleMeet-25">地址</div>
+						<div class="col col-75 ar">{{vm.data.data.address}}</div>
+					</div>
+				</ion-item>
+			</ion-list>
+
 		</div>
 		<div ng-if="vm.data.field == 'notice'">
+			<div class="list-default" ng-if="!vm.data.data">暂无内容</div>
 			{{vm.data.data}}
 		</div>
 		<div ng-if="vm.data.field == 'members'">

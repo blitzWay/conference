@@ -25,26 +25,26 @@
     vm.init();
 
     function init() {
-      publicService.sendRequest('getOrgUserTree', {},
+      publicService.sendRequest('getCompanyLeaders', {},
         function (data) {
           var users = data.data
-          vm.users = users.filter(function (node) {
-            return node.nodeType === '3'
-          })
-          if(!$rootScope.selected){
-            $rootScope.selected = {}
+          vm.users = users;
+
+          if(!$rootScope.selectedLeaders){
+            $rootScope.selectedLeaders = {}
             vm.users.forEach(function(value){
-              $rootScope.selected[value.id] = value
+              $rootScope.selectedLeaders[value.id] = value
             })
           }
 
-          vm.selected = $rootScope.selected
+          vm.selectedLeaders = $rootScope.selectedLeaders
         })
 
     }
 
     function chooseUsersDetail(userId) {
-      vm.selected[userId].selected = !vm.selected[userId].selected
+      console.log(userId)
+      vm.selectedLeaders[userId].selected = !vm.selectedLeaders[userId].selected
       return false;
     }
 

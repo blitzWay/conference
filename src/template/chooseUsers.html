@@ -2,15 +2,15 @@
 	<ion-nav-buttons side="left">
 		<button class="button button-icon icon ion-ios-arrow-back" ng-click="vm.goBack()"></button>
 	</ion-nav-buttons>
-	<ion-content class="has-footer">
-		<div class="body-scroller">
+	<ion-content class="has-footer" overflow-scroll="true">
+		<div class="body-scroller" style="height: 100%;">
 			<ion-list class="mb10 c4A f16 ">
 				<ion-item class="subscribe item-borderless">
 					<div class="row">
-						<div class="col col-75 " ng-if="vm.isDetail == false">{{vm.meetingTitle}}</div>
-						<div class="col col-75 " ng-if="vm.isDetail == true">
+						<div class="col col-100 " ng-if="vm.isDetail == false">{{vm.meetingTitle}}</div>
+						<div class="col col-100 " ng-if="vm.isDetail == true">
 							<input type="text" maxlength="35" ng-if="vm.isDetail"
-								   style="margin-top: -5px;width: 80%;"
+								   style="margin-top: -5px;width: 100%;"
 								   placeholder="输入会议标题"
 								   ng-model="vm.meetingTitle"/>
 						</div>
@@ -36,36 +36,65 @@
 						<div class="col col-75 ar">{{vm.roomName}}</div>
 					</div>
 				</ion-item>
-				<ion-item class="subscribe item-borderless">
-					<div class="row">
-						<div class="col col-25 titleMeet-25">发布人员</div>
-						<div class="col col-75 ar">{{vm.loginName}}</div>
-					</div>
-				</ion-item>
-				<ion-item class="subscribe item-borderless">
-					<div class="row">
-						<div class="col col-25 titleMeet-25">发布单位</div>
-						<div class="col col-75 ar">{{vm.loginName}}</div>
-					</div>
-				</ion-item>
+				<!--<ion-item class="subscribe item-borderless">-->
+					<!--<div class="row">-->
+						<!--<div class="col col-25 titleMeet-25">发布人员</div>-->
+						<!--<div class="col col-75 ar">{{vm.loginName}}</div>-->
+					<!--</div>-->
+				<!--</ion-item>-->
+				<!--<ion-item class="subscribe item-borderless">-->
+					<!--<div class="row">-->
+						<!--<div class="col col-25 titleMeet-25">发布单位</div>-->
+						<!--<div class="col col-75 ar">{{vm.loginName}}</div>-->
+					<!--</div>-->
+				<!--</ion-item>-->
+                <div class="split"></div>
+                <ion-item class="subscribe item-borderless">
+                    <span  class="iconEdit right-text" ng-click="vm.chooseLeaders()" ng-if="vm.isDetail == true"></span>
+                    <div class="up-down-block">
+                        <div class="title">与会领导</div>
+                        <div class="" ng-if="vm.isDetail == true">
+                            <div class="text-ww">
+                                <label>
+									<span ng-repeat="user in vm.selectedLeaders" ng-if="user.selected">
+										{{user.realName }}&nbsp;&nbsp;
+									</span>
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="" ng-if="vm.isDetail == false">
+                            <div class="avatar-wrapper">
+                                <!--<div class="avatar-circle"></div>-->
+                                <span ng-repeat="user in vm.selectedLeaders"  ng-if="user.selected">
+									{{user.realName }}
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </ion-item>
 
 				<div class="split"></div>
 				<ion-item class="subscribe item-borderless">
+					<span  class="iconEdit right-text" ng-click="vm.chooseUsers()" ng-if="vm.isDetail == true"></span>
 					<div class="up-down-block">
 						<div class="title">参会人员</div>
 						<div class="" ng-if="vm.isDetail == true">
-							<span  class="iconEdit right-text" ng-click="vm.chooseUsers()"></span>
 							<div class="text-ww">
 								<label>
-									<span ng-repeat="user in vm.selected">{{user.selected?user.name+',':''}}</span>
+									<span ng-repeat="user in vm.selected">
+										{{user.userName }} <span ng-if="!$last">, </span>
+									</span>
 								</label>
 
 		                    </div>
 						</div>
 						<div class="" ng-if="vm.isDetail == false">
 							<div class="avatar-wrapper">
-								<div class="avatar-circle"></div>
-								<label ng-model="vm.memberNames">{{vm.memberNames}}</label>
+								<!--<div class="avatar-circle"></div>-->
+								<span ng-repeat="user in vm.selected">
+									{{user.userName }} <span ng-if="!$last">, </span>
+								</span>
 							</div>
 						</div>
 					</div>
@@ -76,29 +105,32 @@
 				<ion-item class="subscribe item-borderless">
 					<div class="up-down-block">
 						<div class="title">会议说明</div>
-						<input type="text" placeholder="输入会议说明" ng-model="vm.content">
+						<textarea type="text" placeholder="输入会议说明"
+								  ng-model="vm.content"
+								  style="width: 100%;min-height: 6em;">
+						</textarea>
 					</div>
 				</ion-item>
-				<ion-item ng-if="vm.isDetail" class="subscribe item-borderless">
-					<div class="row padding0">
-						<div class="col col-26 titleMeet-25">通知提醒 :</div>
-						<div class="right-text col-75">
-							<select ng-model="vm.noticeSelect" class="noticeSelect cgold">
-								<option value="2" selected="selected">会前2小时</option>
-                                <option value="1">会前1小时</option>
-                                <option value="0.5">会前半小时</option>
-								<option value="0">不提醒</option>
-							</select>
-						</div>
-					</div>
-				</ion-item>
+				<!--<ion-item ng-if="vm.isDetail" class="subscribe item-borderless">-->
+					<!--<div class="row padding0">-->
+						<!--<div class="col col-26 titleMeet-25">通知提醒 :</div>-->
+						<!--<div class="right-text col-75">-->
+							<!--<select ng-model="vm.noticeSelect" class="noticeSelect cgold">-->
+								<!--<option value="2" selected="selected">会前2小时</option>-->
+                                <!--<option value="1">会前1小时</option>-->
+                                <!--<option value="0.5">会前半小时</option>-->
+								<!--<option value="0">不提醒</option>-->
+							<!--</select>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</ion-item>-->
 
 			</ion-list>
 		</div>
 	</ion-content>
 	<ion-footer-bar ng-if="vm.isDetail" align-title="left">
 		<div class="body-scroller text-center">
-			<button class="button button-positive btn-style" ng-click="vm.saveBtnClick()" >保存并通知与会人员</button>
+			<button class="button button-positive btn-style" ng-click="vm.saveBtnClick()" >提交</button>
 		</div>
 	</ion-footer-bar>
 	<div class="loading-mask" class="loading-mask" ng-if="vm.isActive"></div>

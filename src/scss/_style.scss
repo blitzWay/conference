@@ -357,8 +357,8 @@ span.back-text {
 }
 
 .bar.bar-positive {
-    border-color: #b42b07;
-    background-color: #b42b07;
+    border-color: #d10000;
+    background-color: #d10000;
     background-image: linear-gradient(0deg, #fff, #fff 50%, transparent 50%);
     color: #ffffff;
 }
@@ -525,7 +525,15 @@ button {
     width: 80%;
     display: block;
 }
-
+.button-disabled{
+    background: #ccc;
+    color: white;
+    border-radius: 5px;
+    min-width: 45px;
+    min-height: 30px;
+    border: 0;
+    float: left;
+}
 
 
 /**************/
@@ -1011,7 +1019,7 @@ button {
 @media screen and (min-width:768px) {
 
     .bar.bar-positive {
-        background-color: #b42b07 !important;
+        background-color: #d10000 !important;
     }
 
     .item-thumbnail-left {
@@ -1209,6 +1217,7 @@ body {
 
 .detail-icon {
     text-align: center;
+    padding-top: 40px;
     .detail-icon-img{
         display: block;
         width: 50px;
@@ -1222,7 +1231,7 @@ body {
 }
 .conference-brief{
     .boardroom-name{
-        margin-left: 20px;
+        text-align: right;
     }
 }
 
@@ -1237,4 +1246,45 @@ body {
 }
 .hidden{
     display: none;
+}
+.detail-bg{
+    background: white url(../img/detailbg.png) no-repeat;
+    background-size: contain;
+}
+.icon-user{
+    background: url(../img/user.png) no-repeat;
+    width: 1em;
+    height: 1em;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: -1px;
+    margin-right: 4px;
+}
+.icon-location{
+    background: url(../img/location.png) no-repeat;
+    width: 1em;
+    height: 1em;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: -1px;
+    margin-right: 4px;
+}
+.title-gray{
+    color: #a9a2a2 !important;
+}
+.leader-list{
+    .item:before{
+        content: '';
+        display: inline-block;
+        width: 1.2em;
+        height: 1.2em;
+        vertical-align: middle;
+        border-radius: 50%;
+        border: solid 1px #d10000;
+        margin-right: 4px;
+    }
+    .item.checked:before{
+        content: '';
+        background: #d10000;
+    }
 }
